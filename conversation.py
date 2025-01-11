@@ -9,8 +9,8 @@ def handle_conversation(user_input, chat_display, context_var, chain):
     result = chain.invoke({"context": context, "question": user_input})
     
     chat_display.config(state=tk.NORMAL)
-    chat_display.insert(tk.END, f"You: {user_input}\n")
-    chat_display.insert(tk.END, f"Llama: {result}\n")
+    
+    chat_display.insert(tk.END, f"Llama: {result}\n", "llm")
     chat_display.config(state=tk.DISABLED)
     chat_display.see(tk.END)
     
