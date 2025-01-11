@@ -1,29 +1,34 @@
-from dotenv import load_dotenv
-import openai
-import time
-import os
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import ChatPromptTemplate
 
-load_dotenv("./key.env")
-openai.api_key = os.getenv("OPENAI_API_LLAMA_KEY")
+template = """
+Answer the following question:
 
-def chat(prompt):
-    try:
-        response = openai.Completion.create(
-            model="gpt-3.5-turbo-16k",
-            prompt=prompt,
-        )
-        return response.choices[0].text.strip()
-    except openai.error.RateLimitError: 
-        print("Rate limit exceeded, now waiting...")
-        time.sleep(2)  
-        return chat(prompt)
+Here is the conversation history: {context}
 
-if __name__ == "__main__":
+Qurstion: {question}
+
+Answer:
+"""
+
+model = OllamaLLM(model="llama3")
+prompt = ChatPromptTemplate.from_template(template)
+chain = prompt | model
+
+def handle_conversation():
+    context = ""
+    print("Welcome to Llama Chat!")
+    
     while True:
         user_input = input("You: ")
-
-        if user_input.lower() in ["exit", "quit", "goodbye", "bye", "see ya"]:
+        if user_input.lower() == "exit":
             break
-        response = chat(user_input)
-        print(f"Llama: {response}")
 
+        result = chain.invoke({"context": context, "question": user_input})
+        print(f"Llama: {result}")
+        context += f"\nUser: {user_input}\nLlama: {result}"
+        
+        
+if __name__ == "__main__":
+    handle_conversation()
+        
