@@ -3,7 +3,7 @@ from conversation import handle_conversation
 
 def setup_gui(chain):
     root = tk.Tk()
-    root.title("Llama Chat")
+    root.title("Yama Chat")
     root.geometry("1400x1240")
 
     chat_display = tk.Text(
@@ -34,7 +34,7 @@ def setup_gui(chain):
             llm_response = handle_conversation(user_message, chat_display, context_var, chain)
             
             if llm_response:
-                display_message(f"Llama: {llm_response}", "llm")
+                display_message(f"Yama: {llm_response}", "llm")
             
             if llm_response in ["exit", "quit", "goodbye", "bye", "stop", "end"]:
                 root.destroy()
